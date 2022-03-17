@@ -1,5 +1,6 @@
 #include <Servo.h>
 
+// Initialising each of the pins to a variable
 #define echoPinR 3
 #define trigPinR 2
 #define echoPinL 6
@@ -11,7 +12,7 @@
 #define IR_R 12
 #define IR_L 13
 
-
+// For ultrasonic sensor's calculation
 int distanceR;
 int durationR;
 int distanceL;
@@ -22,7 +23,7 @@ Servo myservo;  // create servo object to control a servo
 
 Servo myservo2;  // create servo object to control a servo
 
-void moveForward (){
+void moveForward (){ // A function to move the robot forward (voltages for the motor driver)
   digitalWrite(dcRF, HIGH);
   digitalWrite(dcRB, LOW);
   digitalWrite(dcLF, LOW);
@@ -30,7 +31,7 @@ void moveForward (){
 
 }
 
-void moveLeft(){
+void moveLeft(){ // A function to move the robot left (voltages for the motor driver)
   digitalWrite(dcRF, HIGH);
   digitalWrite(dcRB, LOW);
   digitalWrite(dcLF, LOW);
@@ -38,7 +39,7 @@ void moveLeft(){
 
 }
 
-void moveRight(){
+void moveRight(){ // A function to move the robot right (voltages for the motor driver)
   digitalWrite(dcRF, LOW);
   digitalWrite(dcRB, LOW);
   digitalWrite(dcLF, LOW);
@@ -46,7 +47,7 @@ void moveRight(){
 
 }
 
-void moveBackward(){
+void moveBackward(){ // A function to move the robot backwards (voltages for the motor driver)
   digitalWrite(dcRF, LOW);
   digitalWrite(dcRB, HIGH);
   digitalWrite(dcLF, HIGH);
@@ -54,14 +55,14 @@ void moveBackward(){
 
 }
 
-void moveStop (){
+void moveStop (){ // A function to stop the robot (voltages for the motor driver)
   digitalWrite(dcRF, LOW);
   digitalWrite(dcRB, LOW);
   digitalWrite(dcLF, LOW);
   digitalWrite(dcLB, LOW);
 }
 
-void setup()
+void setup() // Enabling the respective pins to read input/send output
 {
   pinMode(echoPinR, INPUT);
   pinMode(trigPinR, OUTPUT);
@@ -80,7 +81,7 @@ void setup()
 
 void loop()
 {
-  //Right Ultrasound
+  // Right Ultrasound - checking the distance of the surface from it
   digitalWrite(trigPinR, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPinR, HIGH);
@@ -91,7 +92,7 @@ void loop()
   Serial.println("Right: ");
   Serial.println(distanceR);
   
-  //Left Ultrasound
+  // Left Ultrasound - checking the distance of the surface from it
   digitalWrite(trigPinL, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPinL, HIGH);
@@ -102,7 +103,7 @@ void loop()
   Serial.println("Left: ");
   Serial.println(distanceL);
 
-  //Movement
+  // Movement - ensures that the robot does not deviate from its intended path 
   if (distanceR > 20 && distanceL > 20){
     if (digitalRead(IR_R) == HIGH && digitalRead(IR_L) == HIGH)
     {
@@ -118,13 +119,13 @@ void loop()
     }
   }
   
-  else if (distanceR < 20)
+  else if (distanceR < 20) // Spray on the right side if there is a table surface
   {
     myservo.write(180);
     moveStop();
     delay(2500);
   }
-  else if (distanceL < 20)
+  else if (distanceL < 20) // Spray on the left side if there is a table surface
   {
     myservo2.write(180);
     moveStop();
